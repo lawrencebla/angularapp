@@ -1,0 +1,30 @@
+{
+  "name": "angularapp",
+  "version": "0.0.1",
+  "dependencies": {
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-less": "^1.0.1",
+    "grunt-browserify": "^3.8.0",
+    "babelify": "^6.1.2"
+  },
+  "scripts": {
+    "s": "nodemon server/server.js localhost 3001",
+    "server": "node --harmony server/server.js",
+    "dev": "grunt -d --stack dev",
+    "build": "grunt build"
+  },
+  "repository": {},
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-browser-sync": "^2.1.3",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-contrib-watch": "^0.6.1",
+    "koa": "^0.21.0",
+    "koa-router": "^5.1.2",
+    "nodemon": "^1.3.7"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  }
+}

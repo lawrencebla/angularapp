@@ -1,0 +1,16 @@
+{
+    "boss": true,
+    "debug": true,
+    "eqnull": true,
+    "immed": true,
+    "latedef": true,
+    "lastsemic": true,
+    "newcap": true,
+    "noarg": true,
+    "sub": true,
+    "undef": true,
+    "node": true,
+    "-W117": true,
+    "funcscope": true,
+    "esnext":true
+}
