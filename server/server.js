@@ -1,18 +1,17 @@
-﻿"use strict";
+"use strict";
 
-var http = require('http');
 var url = require("url");
 var fs = require("fs");
 var path=require("path");
 
+var browserSync = require('browser-sync');
 var app = require('koa')();
-var Router = require('koa-router');
 
-const ROOT = "./app";
+const ROOT = ".";
 const DEFAULT_FILE = "index.html";
 const SLASH = "/";
 const POINT = ".";
-
+ 
 var simulateApiRouter = require('./simulateApiRouter/simulateApiRouter.js');
 
 app.use(simulateApiRouter);
@@ -37,16 +36,11 @@ app.use(function*(next) {
 });
 
 app.use(function*() {
-	// console.log(this.url);
 	var that = this;
 	if(this.method == "GET") {
 
-		var pathname = ROOT + this.url;
-		if(pathname.lastIndexOf(SLASH) > pathname.lastIndexOf(POINT)) {
-
-			if(!pathname.endsWith(SLASH)) {
-				pathname += SLASH;
-			}
+		var pathname = ROOT + url.parse(this.url).pathname;
+		if( this.url === SLASH ) {
 			pathname += DEFAULT_FILE;
 		}
 		try{
@@ -72,5 +66,10 @@ app.use(function*() {
 	}
 });
 
-
-app.listen(3000);
+browserSync({
+    server: "",
+    open: false,
+    ui: false,
+    files: ["index.html", "build/*.js", "build/*.css"],
+    middleware: app.callback()
+});

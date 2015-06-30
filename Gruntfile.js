@@ -5,18 +5,6 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
-        concat: {
-            options: {
-                separator: ';'/*,
-                sourceMap: true,
-                sourceMapStyle: "inline"*/
-            },
-            dist: {
-                src: ['build/vendor.js'],
-                dest: 'build/bundle.js'
-            },
-        },
-
         uglify: {
             dist: {
                 src: ['build/vendor.js'],
@@ -30,12 +18,12 @@ module.exports = function(grunt) {
                 jshintrc: true
             },
             all: [
-                'app/js/**/*.js'
+                'app/**/*.js'
             ]
         },
         browserify: {
             vendor: {
-                src: ['app/js/app.js'],
+                src: ['app/app.js'],
                 dest: 'build/vendor.js',
                 options: {
                     transform: [
@@ -73,7 +61,7 @@ module.exports = function(grunt) {
 
         watch: {
             scripts: {
-                files: ['app/js/*.js'],
+                files: ['app/**/*.js'],
                 tasks: ['dev_js'],
                 options: {
                     spawn: false,
@@ -87,30 +75,14 @@ module.exports = function(grunt) {
                     livereload: true
                 }             
             }
-        },
-        browserSync: {
-            dev: {
-                bsFiles: {
-                    src : [
-                        'build/*.js',
-                        'build/*.css',
-                        'app/*.html'
-                    ]
-                },
-                options: {
-                    watchTask: true,
-                    server: './',
-                    index: "app/index.html"
-                }
-            }
         }
+
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-browser-sync');
     grunt.loadNpmTasks('grunt-browserify');
 
     grunt.registerTask('build', ['browserify', 'uglify', 'less:build']);
@@ -118,6 +90,5 @@ module.exports = function(grunt) {
     grunt.registerTask('dev_js', ['jshint', 'browserify']);
     grunt.registerTask('dev_css', ['jshint', 'less:development']);
 
-    grunt.registerTask('dev', ['dev_js', 'dev_css', 'browserSync', 'watch']);
-
+    grunt.registerTask('dev', ['dev_js', 'dev_css', 'watch']);
 };
