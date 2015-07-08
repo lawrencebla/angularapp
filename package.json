@@ -1,12 +1,19 @@
 {
   "name": "angularapp",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "dependencies": {
-    "grunt-cli": "^0.1.13",
-    "grunt-contrib-uglify": "^0.9.1",
-    "grunt-contrib-less": "^1.0.1",
+    "angular": "^1.4.1",
+    "babelify": "^6.1.2",
     "grunt-browserify": "^3.8.0",
-    "babelify": "^6.1.2"
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-copy": "^0.8.0",
+    "grunt-contrib-htmlmin": "^0.4.0",
+    "grunt-contrib-imagemin": "^0.9.4",
+    "grunt-contrib-less": "^1.0.1",
+    "grunt-contrib-uglify": "^0.9.1",
+    "grunt-svgmin": "^2.0.1",
+    "grunt-usemin": "^3.0.0"
   },
   "scripts": {
     "server": "nodemon server/server.js",
@@ -17,6 +24,7 @@
   "devDependencies": {
     "browser-sync": "^2.7.12",
     "grunt": "^0.4.5",
+    "grunt-angular-templates": "^0.5.7",
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-contrib-watch": "^0.6.1",
     "koa": "^0.21.0",
@@ -25,5 +33,7 @@
   },
   "engines": {
     "node": ">=0.10.0"
-  }
+  },
+  "appPath": "app",
+  "distPath": "build"
 }

@@ -23,7 +23,7 @@ module.exports = function(grunt) {
         },
         browserify: {
             vendor: {
-                src: ['app/app.js'],
+                src: ['app/**/*.js'],
                 dest: 'build/vendor.js',
                 options: {
                     transform: [
@@ -75,7 +75,100 @@ module.exports = function(grunt) {
                     livereload: true
                 }             
             }
-        }
+        },
+
+        copy: {
+            dist: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= pkg.appPath %>',
+                    dest: '<%= pkg.distPath %>',
+                    src: [
+                        '*.{ico,png,txt}',
+                        '.htaccess',
+                        '*.html',
+                        'views/{,*/}*.html',
+                        'images/{,*/}*.{webp}',
+                        'styles/fonts/{,*/}*.*'
+                    ]
+                }]
+            },
+            index: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= pkg.appPath %>',
+                    dest: '',
+                    src: [
+                        'index.html',
+                    ]
+                }]
+            },
+            styles: {
+                expand: true,
+                cwd: '<%= pkg.appPath %>/styles',
+                dest: '.tmp/styles/',
+                src: '{,*/}*.css'
+            }
+        },
+
+
+        htmlmin: {
+            dist: {
+                options: {
+                    collapseWhitespace: true,
+                    conservativeCollapse: true,
+                    collapseBooleanAttributes: true,
+                    removeCommentsFromCDATA: true,
+                    removeOptionalTags: true
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= pkg.distPath %>',
+                    src: ['*.html', 'app/views/{,*/}*.html'],
+                    dest: '<%= pkg.distPath %>'
+                }]
+            }
+        },
+
+
+        wiredep: {
+            app: {
+                src: ['index.html'],
+                ignorePath:  /\.\.\//
+            }
+        },
+
+        useminPrepare: {
+            html: 'index.html',
+            options: {
+                dest: '<%= pkg.distPath %>',
+                flow: {
+                    html: {
+                        steps: {
+                            js: ['concat', 'uglifyjs'],
+                            css: ['cssmin']
+                        },
+                        post: {}
+                    }
+                }
+            }
+        },
+
+        usemin: {
+            html: ['<%= pkg.distPath %>/{,*/}*.html'],
+            css: ['<%= pkg.distPath %>/styles/{,*/}*.css'],
+            options: {
+                assetsDirs: [
+                    '<%= pkg.distPath %>',
+                    '<%= pkg.distPath %>/images',
+                    '<%= pkg.distPath %>/styles'
+                ]
+            }
+        },
+
+
 
     });
 
@@ -85,10 +178,25 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-browserify');
 
-    grunt.registerTask('build', ['browserify', 'uglify', 'less:build']);
+    grunt.loadNpmTasks('grunt-wiredep');
+    grunt.loadNpmTasks('grunt-usemin');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-htmlmin');
+
+    grunt.registerTask('bower', [
+        'copy:index',
+        "wiredep",
+        "useminPrepare",
+        'copy:dist',
+        'copy:styles',
+        'usemin',
+        'htmlmin'
+    ]);
+
+    grunt.registerTask('build', ['bower', 'browserify', 'uglify', 'less:build']);
 
     grunt.registerTask('dev_js', ['jshint', 'browserify']);
     grunt.registerTask('dev_css', ['jshint', 'less:development']);
 
-    grunt.registerTask('dev', ['dev_js', 'dev_css', 'watch']);
+    grunt.registerTask('dev', ['bower', 'dev_js', 'dev_css', 'watch']);
 };
