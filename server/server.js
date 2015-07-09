@@ -43,7 +43,6 @@ app.use(function*() {
 		if( this.url === SLASH ) {
 			pathname += DEFAULT_FILE;
 		}
-		console.log(pathname);
 		try{
 			var fstat = yield (function (file) {
 				return function (done) {
